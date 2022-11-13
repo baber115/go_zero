@@ -1,0 +1,12 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8888
+Mysql:
+  DataSource: root:@tcp(localhost:3306)/golang?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Redis:
+  - Host: 127.0.0.1:6379
+    Pass: secret_redis
+    Type: node
+Auth:
+  AccessSecret: adfqrewvxc1rfd
+  AccessExpire: 3000

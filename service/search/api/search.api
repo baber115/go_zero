@@ -1,0 +1,25 @@
+syntax = "v1"
+
+type (
+	SearchReq {
+		Name string `json:"name"`
+	}
+	SearchResp {
+		Name  string `json:"name"`
+		Count int    `json:"count"`
+	}
+)
+
+@server(
+	jwt: Auth
+	middleware: Example
+)
+service search-api {
+	@handler search
+	get /search/do (SearchReq) returns (SearchResp)
+}
+
+service search-api {
+	@handler ping
+	get /search/ping
+}
