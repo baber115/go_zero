@@ -1,29 +1,1 @@
-# 场景
-程序员小明需要借阅一本《西游记》，在没有线上图书管理系统的时候，他每天都要去图书馆前台咨询图书馆管理员，
-* 小明：你好，请问今天《西游记》的图书还有吗？
-* 管理员：没有了，明天再来看看吧。
-
-过了一天，小明又来到图书馆，问：
-* 小明：你好，请问今天《西游记》的图书还有吗？
-* 管理员：没有了，你过两天再来看看吧。
-
-就这样经过多次反复，小明也是徒劳无功，浪费大量时间在来回的路上，于是终于忍受不了落后的图书管理系统，
-他决定自己亲手做一个图书查阅系统。
-
-## 预期实现目标
-* 用户登录
-  依靠现有学生系统数据进行登录
-* 图书检索
-  根据图书关键字搜索图书，查询图书借阅情况，归还时间等。
-
-## 系统分析
-### 服务拆分
-* user
-    * api 提供用户登录协议
-    * rpc 供search服务访问用户数据
-* search
-    * api 提供图书查询协议
-
-> [!TIP]
-> 这个微小的图书借阅查询系统虽然小，从实际来讲不太符合业务场景，但是仅上面两个功能，已经满足我们对go-zeroapi/rpc的场景演示了，
-> 后续为了满足更丰富的go-zero功能演示，会在文档中进行业务插入即相关功能描述。这里仅用一个场景进行引入。
+# 场景程序员小明需要借阅一本《西游记》，在没有线上图书管理系统的时候，他每天都要去图书馆前台咨询图书馆管理员，* 小明：你好，请问今天《西游记》的图书还有吗？* 管理员：没有了，明天再来看看吧。过了一天，小明又来到图书馆，问：* 小明：你好，请问今天《西游记》的图书还有吗？* 管理员：没有了，你过两天再来看看吧。就这样经过多次反复，小明也是徒劳无功，浪费大量时间在来回的路上，于是终于忍受不了落后的图书管理系统，他决定自己亲手做一个图书查阅系统。## 预期实现目标* 用户登录  依靠现有学生系统数据进行登录* 图书检索  根据图书关键字搜索图书，查询图书借阅情况，归还时间等。## 系统分析### 服务拆分* user    * api 提供用户登录协议    * rpc 供search服务访问用户数据* search    * api 提供图书查询协议> [!TIP]> 这个微小的图书借阅查询系统虽然小，从实际来讲不太符合业务场景，但是仅上面两个功能，已经满足我们对go-zeroapi/rpc的场景演示了，> 后续为了满足更丰富的go-zero功能演示，会在文档中进行业务插入即相关功能描述。这里仅用一个场景进行引入。# 启动并验证服务## 单体服务### 启动user api服务，登录```cmdcd service/user/apigo run user.go -f etc/user-api.yamlStarting server at 0.0.0.0:8888...curl -i -X POST http://127.0.0.1:8888/user/login -H "Content-Type: application/json" -d "{ \"username\":\"666\", \"password\":\"123456\" }"```### 启动search api服务，调用/search/do验证jwt鉴权是否通过```cmdgo run search.go -f etc/search-api.yamlStarting server at 0.0.0.0:8889...curl -i -X GET 'http://127.0.0.1:8899/search/do?name=%E8%A5%BF%E6%B8%B8%E8%AE%B0' -H 'Authorization: {token}'```## 微服务### 启动etcd、redis、mysql```cmdetcd```### 启动user rpc```cmdcd service/user/rpcgo run user.go -f etc/user.yamlStarting rpc server at 127.0.0.1:8080...```### 启动search api```cmdcd service/search/apigo run search.go -f etc/search-api.yaml```### 验证服务```cmdcurl -i -X GET 'http://127.0.0.1:8899/search/do?name=%E8%A5%BF%E6%B8%B8%E8%AE%B0' -H 'Authorization: {token}'```
