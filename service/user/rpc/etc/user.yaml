@@ -5,7 +5,7 @@ Etcd:
     - 127.0.0.1:2379
   Key: user.rpc
 Mysql:
-  DataSource: root:@tcp(localhost:3306)/golang?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: root:root@tcp(localhost:3306)/golang?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 CacheRedis:
   - Host: 127.0.0.1:6379
     Pass: secret_redis

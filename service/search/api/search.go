@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stringx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
@@ -70,6 +71,12 @@ func main() {
 	// 中间件
 	server.Use(middleware)
 	server.Use(middlewareWithAnotherService(new(AnotherService)))
+	server.Use(func(next http.HandlerFunc) http.HandlerFunc {
+		return func(writer http.ResponseWriter, request *http.Request) {
+			logx.Info("global middleware")
+			next(writer, request)
+		}
+	})
 	server.AddRoute(rest.Route{
 		Method:  http.MethodGet,
 		Path:    "/search/greet",
